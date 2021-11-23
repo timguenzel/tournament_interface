@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: rgb(61, 61, 61);
+            float: left;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+        
+        .sidebar {
+            background-color: rgb(41, 41, 41);
+            left: 0;
+            top: 0;
+            position: fixed;
+            z-index: 1;
+            width: 20vw;
+            color: #FFF;
+            text-align: center;
+            align-items: center;
+            height: 100%;
+            box-shadow: 5px 0px 7px rgba(0, 0, 0, 0.4);
+            overflow: auto;
+            border-right: 1px solid white;
+        }
+        
+        .sidebar nav{
+            top: 0;
+            padding-top: 25px;
+            font-size: 20px;
+            background: rgb(50,50,50);
+            border-bottom: 1px solid white;
+            box-shadow: 0px 4px 6px rgba(0,0,0,0.2);
+            position: fixed;
+            width: 20%;
+        }
+
+        .addBtn {
+            border: 2px solid rgb(117, 117, 117);
+            border-radius: 4px;
+            font-size: 25px;
+            background-color: rgb(61, 61, 61);
+            text-align: auto;
+            width: 25%;
+            margin: 15% 0% 37% 37%;
+        }
+
+        .addBtn:hover {
+            cursor: pointer;
+            box-shadow: 0px 0px 10px rgba(255,255,255,0.3);
+        }
+
+        .userDiv {
+            background-color: rgb(70, 70, 70);
+            border: 1px solid black;
+            width: 90%;
+            min-height: max-content;
+        }
+
+        .inputBox {
+            margin-top: 5px;
+            padding:10px; 
+            font-size: 15px;
+            max-width: 80%;
+            background-color: #111; 
+            border: 0; border-bottom: 
+            1px solid white;
+            color: white;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: white;
+            box-shadow: inset 0 0 5px rgba(255,255,255,0.2);
+
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgb(216, 216, 216)
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgb(31, 31, 31);
+        }
+
+        .create { 
+            border-top: 1px solid white;
+            bottom: 0;
+            height: 50px;
+            position: fixed;
+            width: 20% ;
+            padding-top: 10px;
+            background: rgb(50,50,50);
+            box-shadow: 0px -3px 6px rgba(0,0,0,0.2)
+        }
+
+        .addUser {
+            margin-top: 20px;
+            background: rgb(40,40,40);
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .extend {
+            color: white;
+            font-size: 15px;
+            margin-left: 10px;
+        }
+
+        .extend:hover {
+            cursor: pointer;
+            font-size: 17px;
+        }
+    </style>
+</head>
+<body>
+    <main id="main">
+        <div class="sidebar" id="sidebar">
+            <nav>
+                <label for="tName" style="text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);">Tournament Name</label>
+                <input type="text" placeholder="Tournament Name" id="tName" class="inputBox">
+                <div>
+                    <select id="userSelect" class="addUser" onchange="addUser()">
+                        <option value=""></option>
+                        <option value="4">4</option>
+                        <option value="8">8</option>
+                        <option value="16">16</option>
+                        <option value="32">32</option>
+                    </select>
+                </div>
+            </nav>
+            <div id="users" style="text-align: center; padding-top: 150px; margin-bottom: 60px;"></div>
+            <div class="create" onclick="encodeQueryData()">
+                <a type="button" class="addBtn" style="margin: 0;">Create</a>
+            </div>
+        </div>
+    </main>
+    <script>
+        function addUser() {
+            var a = 1;
+            document.getElementById("users").innerHTML = '';
+            userCount = document.getElementById("userSelect").value;
+            for (i=0; i<userCount; i++) {
+                user = document.createElement("div");
+                userName = document.createElement("input");
+                userName.type = "text"
+                userName.id = "user" + a;
+                userName.className = "inputBox";
+                userName.style.padding = "5px";
+                userName.style.marginBottom = "5px"
+                userName.placeholder = "Username"
+                pfp = document.createElement("input")
+                pfp.type = "text"
+                pfp.id = "pfp" + a;
+                pfp.style.padding = "5px"
+                pfp.style.marginBottom = "5px";
+                pfp.placeholder = "Icon Link"
+                pfp.hidden = true;
+                pfp.className = "inputBox"
+                extend = document.createElement("a")
+                extend.innerHTML = "+"
+                extend.className = "extend"
+                extend.id = "extend" + a
+                extend.setAttribute("onclick", `extendUser('${a}')`)
+                user.className = "userDiv";
+                user.style.margin = "5%"
+                user.appendChild(userName);
+                user.appendChild(extend)
+                user.appendChild(pfp)
+                document.getElementById("users").appendChild(user)
+                a += 1;
+            }
+        }
+
+        function extendUser(id) {
+            extContent = document.getElementById("pfp" + id)
+            if (extContent.hidden == true) {
+                extContent.hidden = false
+                document.getElementById("extend" + id).innerHTML = "-"
+            } else {
+                extContent.hidden = true
+                document.getElementById("extend" + id).innerHTML = "+"
+            }
+        }
+
+        function encodeQueryData() {
+            data = {}
+            for (i=1;i<=32;i++) {
+                try {
+                    cUser = document.getElementById("user" + i)
+                    cPfp = document.getElementById("pfp" + i)
+                    data("user"+i) = cUser.value;
+                    data("pfp"+i) = cPfp.value;
+                } catch (e) {}
+            }
+            const ret = [];
+            for (let d in data)
+                ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
+            console.log( ret.join('&'));
+        }
+    </script>
+</body>
+</html>
