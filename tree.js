@@ -71,6 +71,7 @@ function tournamentTree(playercount) {
         }
     }
     resizeCanvas(numOfTiles * tileWidth, 800)
+    i
 }
 
 function setup() {
@@ -81,7 +82,7 @@ function setup() {
 }
 
 function draw() {
-    background(255)
+    background(70)
 
     let z = 1
     let x = 0
